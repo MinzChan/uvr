@@ -117,8 +117,8 @@ class  _audio_pre_():
                inputfile = arg
             elif opt in ("-o", "--ofile"):
                outputfile = arg
-         print '输入的文件为：', inputfile
-         print '输出的文件为：', outputfile
+         print ('%s 输入的文件为'%inputfile)
+         print ('%s 输出的文件为'%outputfile)
           pre_fun = _audio_pre_(model_path=model_path,device=device,is_half=True)
           pre_fun._path_audio_(audio_path , save_path,save_path)
 
