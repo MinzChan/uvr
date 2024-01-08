@@ -98,7 +98,7 @@ class  _audio_pre_():
             print ('%s vocals done'%name)
             wavfile.write(os.path.join(vocal_root , 'vocal_{}.wav'.format(name) ), self.mp.param['sr'], (np.array(wav_vocals)*32768).astype("int16"))
 
-    def test(argv):
+    def test(self, argv):
          device = 'cuda'
          is_half=True
          model_path='uvr5_weights/2_HP-UVR.pth'
