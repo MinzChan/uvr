@@ -9,7 +9,7 @@ from uvr5_pack.lib_v5 import spec_utils
 from uvr5_pack.utils import _get_name_params,inference
 from uvr5_pack.lib_v5.model_param_init import ModelParameters
 from scipy.io import wavfile
-
+ 
 class  _audio_pre_():
     def __init__(self, model_path,device,is_half):
         self.model_path = model_path
@@ -33,7 +33,7 @@ class  _audio_pre_():
         nets = importlib.import_module('uvr5_pack.lib_v5.nets' + f'_{nn_architecture}'.replace('_{}KB'.format(nn_arch_sizes[0]), ''), package=None)
         model_hash = hashlib.md5(open(model_path,'rb').read()).hexdigest()
         param_name ,model_params_d = _get_name_params(model_path , model_hash)
-
+ 
         mp = ModelParameters(model_params_d)
         model = nets.CascadedASPPNet(mp.param['bins'] * 2)
         cpk = torch.load( model_path , map_location='cpu')  
@@ -41,10 +41,10 @@ class  _audio_pre_():
         model.eval()
         if(is_half==True):model = model.half().to(device)
         else:model = model.to(device)
-
+ 
         self.mp = mp
         self.model = model
-
+ 
     def _path_audio_(self, music_file ,ins_root=None,vocal_root=None):
         if(ins_root is None and vocal_root is None):return "No save root."
         name=os.path.basename(music_file)
@@ -68,7 +68,7 @@ class  _audio_pre_():
             if d == bands_n and self.data['high_end_process'] != 'none':
                 input_high_end_h = (bp['n_fft']//2 - bp['crop_stop']) + ( self.mp.param['pre_filter_stop'] - self.mp.param['pre_filter_start'])
                 input_high_end = X_spec_s[d][:, bp['n_fft']//2-input_high_end_h:bp['n_fft']//2, :]
-
+ 
         X_spec_m = spec_utils.combine_spectrograms(X_spec_s, self.mp)
         aggresive_set = float(self.data['agg']/100)
         aggressiveness = {'value': aggresive_set, 'split_bin': self.mp.param['band'][1]['crop_stop']}
@@ -80,7 +80,7 @@ class  _audio_pre_():
             pred = spec_utils.mask_silence(pred, pred_inv)
         y_spec_m = pred * X_phase
         v_spec_m = X_spec_m - y_spec_m
-
+ 
         if (ins_root is not None):
             if self.data['high_end_process'].startswith('mirroring'):
                 input_high_end_ = spec_utils.mirroring(self.data['high_end_process'], y_spec_m, input_high_end, self.mp)
@@ -97,7 +97,7 @@ class  _audio_pre_():
                 wav_vocals = spec_utils.cmb_spectrogram_to_wave(v_spec_m, self.mp)
             print ('%s vocals done'%name)
             wavfile.write(os.path.join(vocal_root , 'vocal_{}.wav'.format(name) ), self.mp.param['sr'], (np.array(wav_vocals)*32768).astype("int16"))
-
+ 
 	def test(self, argv):
 		device = 'cuda'
 		is_half=True
@@ -121,6 +121,6 @@ class  _audio_pre_():
         print ('%s 输出的文件为'%outputfile)
         pre_fun = _audio_pre_(model_path=model_path,device=device,is_half=True)
         pre_fun._path_audio_(audio_path , save_path,save_path)
-
+ 
 if __name__ == '__main__':
 	test(sys.argv[1:])
