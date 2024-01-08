@@ -98,18 +98,18 @@ class  _audio_pre_():
             print ('%s vocals done'%name)
             wavfile.write(os.path.join(vocal_root , 'vocal_{}.wav'.format(name) ), self.mp.param['sr'], (np.array(wav_vocals)*32768).astype("int16"))
 
-    def test(self, argv):
-         device = 'cuda'
-         is_half=True
-         model_path='uvr5_weights/2_HP-UVR.pth'
-         inputfile = 'audio.aac'
-         outputfile = 'opt'
-         try:
-            opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
-         except getopt.GetoptError:
+	def test(self, argv):
+		device = 'cuda'
+		is_half=True
+		model_path='uvr5_weights/2_HP-UVR.pth'
+		inputfile = 'audio.aac'
+		outputfile = 'opt'
+        try:
+			opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+        except getopt.GetoptError:
             print('test.py -i <inputfile> -o <outputfile>')
             sys.exit(2)
-         for opt, arg in opts:
+        for opt, arg in opts:
             if opt == '-h':
                print('test.py -i <inputfile> -o <outputfile>')
                sys.exit()
@@ -117,10 +117,10 @@ class  _audio_pre_():
                inputfile = arg
             elif opt in ("-o", "--ofile"):
                outputfile = arg
-         print ('%s 输入的文件为'%inputfile)
-         print ('%s 输出的文件为'%outputfile)
-         pre_fun = _audio_pre_(model_path=model_path,device=device,is_half=True)
-         pre_fun._path_audio_(audio_path , save_path,save_path)
+        print ('%s 输入的文件为'%inputfile)
+        print ('%s 输出的文件为'%outputfile)
+        pre_fun = _audio_pre_(model_path=model_path,device=device,is_half=True)
+        pre_fun._path_audio_(audio_path , save_path,save_path)
 
 if __name__ == '__main__':
-    test(sys.argv[1:])
+	test(sys.argv[1:])
