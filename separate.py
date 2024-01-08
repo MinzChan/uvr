@@ -119,8 +119,8 @@ class  _audio_pre_():
                outputfile = arg
          print ('%s 输入的文件为'%inputfile)
          print ('%s 输出的文件为'%outputfile)
-          pre_fun = _audio_pre_(model_path=model_path,device=device,is_half=True)
-          pre_fun._path_audio_(audio_path , save_path,save_path)
+         pre_fun = _audio_pre_(model_path=model_path,device=device,is_half=True)
+         pre_fun._path_audio_(audio_path , save_path,save_path)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
