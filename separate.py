@@ -124,7 +124,7 @@ class  _audio_pre_():
 
 if __name__ == '__main__':
 
-    def main(self, argv):
+    def main(argv):
         device = 'cuda'
         is_half=True
         model_path='uvr5_weights/2_HP-UVR.pth'
